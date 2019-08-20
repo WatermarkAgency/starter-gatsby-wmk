@@ -1,5 +1,8 @@
-import React from 'react';
+import React from "react";
+import Layout from "../components/layout/MainLayout";
 
-export default ({pageContext}) => (
-<div>Post Here {console.log(pageContext)}</div>
-)
+export default ({ pageContext }) => (
+  <Layout>
+    <h2>Post Here</h2> {console.log(pageContext)}
+  </Layout>
+);
