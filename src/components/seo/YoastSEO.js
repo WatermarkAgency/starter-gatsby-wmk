@@ -8,9 +8,9 @@
 import React from "react"
 import PropTypes from "prop-types"
 import Helmet from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
+import {graphql, useStaticQuery} from 'gatsby'
 
-function SEO({ description, lang, meta, title }) {
+const SEO = ({ yoast, lang, meta }) => {
   const { site } = useStaticQuery(
     graphql`
       query {
@@ -24,9 +24,8 @@ function SEO({ description, lang, meta, title }) {
       }
     `
   )
-
-  const metaDescription = description || site.siteMetadata.description
-
+  const title = yoast && yoast.yoast_wpseo_title ? yoast.yoast_wpseo_title  : site.siteMetadata.title
+  const metaDescription = yoast && yoast.yoast_wpseo_metadesc ? yoast.yoast_wpseo_metadesc : site.siteMetadata.description
   return (
     <Helmet
       htmlAttributes={{
@@ -79,10 +78,10 @@ SEO.defaultProps = {
 }
 
 SEO.propTypes = {
+  yoast: PropTypes.object.isRequired,
   description: PropTypes.string,
   lang: PropTypes.string,
   meta: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string.isRequired,
 }
 
 export default SEO
