@@ -32,7 +32,7 @@ A quick look at the top-level of src files
 
 4.  **`/pages`**: Any file here will match a route. The one special case is 404.js which will be the custom page displayed if no matching route is found. So if a widget.js is placed at the root level of this folder, that component will render at siteurl.com/widget. Same goes for subfolders (i.e. pages/widgets/thingys.js will match siteurl.com/widget/thingys
 
-5.  **`vars`**: This file will construct a Theme class that will hold commonly used theme variables. Be sure to add all initial values to this file first. (**look for const Theme = new ThemeOptions({})**) You will want to import the class in each component you want variables included like so:
+5.  **`vars`**: This file will construct a Theme class that will hold commonly used theme variables. Be sure to add all initial values to this file first. (**`look for const Theme = new ThemeOptions({})`**) For now, all colors must be added as hexadecimal values. You will want to import the class in each component you want variables included like so:
 
     ```js
     import Theme from '../vars/ThemeOptions'
@@ -44,7 +44,7 @@ A quick look at the top-level of src files
     ├── rgb()
     └── alpha()
     
-    1. pad(size, string = true) : Size default are described in **getThemePadding()**
+    1. pad(size, string = true) : Size default are described in **`getThemePadding()`**
     If string = true, the function will return a string with the padding size + base unit. Otherwise, it will just return the numerical value
     
     ```js
