@@ -13,7 +13,7 @@ const slash = require(`slash`)
 // Will create pages for WordPress posts (route : /post/{slug})
 exports.createPages = ({ graphql, actions }) => {
   const { createPage, createRedirect } = actions
-  createRedirect({fromPath: '/', toPath: `${Theme.paths.home}`, isPermanent: true, redirectInBrowser: true})
+  createRedirect({fromPath: '/', toPath: `${Theme.path.home}`, isPermanent: true, redirectInBrowser: true})
   return new Promise((resolve, reject) => {
     // The “graphql” function allows us to run arbitrary
     // queries against the local WordPress graphql schema. Think of
@@ -98,7 +98,7 @@ exports.createPages = ({ graphql, actions }) => {
           // The Post ID is prefixed with 'POST_'
           _.each(result.data.allWordpressPost.edges, edge => {
             createPage({
-              path: `${Theme.paths.blog}${edge.node.slug}/`,
+              path: `${Theme.path.blog}${edge.node.slug}/`,
               component: slash(postTemplate),
               context: edge.node,
             })
@@ -137,7 +137,7 @@ exports.createPages = ({ graphql, actions }) => {
     //     // The Post ID is prefixed with 'POST_'
     //     _.each(result.data.allWordpressTag.edges, edge => {
     //       createPage({
-    //         path: `${Theme.paths.tags}${edge.node.slug}/`,
+    //         path: `${Theme.path.tags}${edge.node.slug}/`,
     //         component: slash(postTemplate),
     //         context: edge.node,
     //       })

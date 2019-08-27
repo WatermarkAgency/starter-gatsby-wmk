@@ -25,9 +25,10 @@ const getThemePadding = (base = 1, units = "rem") => {
   return { sizes: padding, base, units };
 };
 
+
 // const themePad = getThemePadding()
 
-// const themeFontName = `Helvetica, Arial, sans-serif`
+const themeFontName = `Helvetica, Arial, sans-serif`;
 
 class ThemeOptions {
   constructor(settings) {
@@ -36,13 +37,15 @@ class ThemeOptions {
     this.font = settings.font ? settings.font : {};
     this.paths = settings.paths ? settings.paths : {};
     this.padding = settings.padding ? settings.padding : getThemePadding();
-    this.baseUnit = settings.baseUnit ? settings.baseUnit : "rem";
   }
+  // Get numeric padding value based on size (key)
+  // Also pass true to get full padding string
   getPad(size, string = true) {
     return string
       ? `${this.padding.sizes[size] * this.padding.base}${this.padding.units}`
       : `${this.padding.sizes[size] * this.padding.base}`;
   }
+  // Pass hexidecimal value and get back RGB Array
   hexToRgb(hex) {
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
     var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -59,9 +62,11 @@ class ThemeOptions {
         }
       : null;
   }
+  // Return color's hex value
   hex(color) {
     return this.color[color].hex;
   }
+  // Return color's rbg value as string, pass false for array
   rgb(color, string = true) {
     const rgb =
       this.color[color] && this.color[color].rgb
@@ -69,6 +74,7 @@ class ThemeOptions {
         : this.hexToRgb(this.color[color].hex);
     return string ? `rgb(${rgb.r},${rgb.g},${rgb.b})` : rgb;
   }
+  // Return color's rbga value as string, pass false for array
   alpha(color, alpha = 1, string = true) {
     const rgb = this.color[color] ? this.rgb(color, false) : null;
     const rgba = rgb ? rgb : null;
@@ -79,6 +85,7 @@ class ThemeOptions {
       ? `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`
       : rgba;
   }
+  // Will lighten / darken a hexidecimal color
   lightenDarkenColor(hex, amt) {
     let usePound = false;
 
@@ -103,18 +110,36 @@ class ThemeOptions {
 
     if (g > 255) g = 255;
     else if (g < 0) g = 0;
+    if(g < 10) g = '0'+g
 
-    return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+    // Added this code to add missing zeroes
+     let newHex = (g | (b << 8) | (r << 16)).toString(16)
+    // do {
+    //     newHex = 0+newHex
+    // } while (newHex.length < 6)
+
+    return (usePound ? "#" : "") + newHex;
   }
-  lighter(color, amt = 10) {
+  // Will lighten color based on name (key)
+  lighten(color, amt = 10) {
     return this.color[color]
       ? this.lightenDarkenColor(this.hex(color), amt)
       : null;
   }
-  darker(color, amt = 10) {
+  // Will darken color based on name (key)
+  darken(color, amt = 10) {
+      amt = amt > 0 ? (amt * (1 - 2)) : amt
     return this.color[color]
-      ? this.lightenDarkenColor(this.hex(color), amt * -1)
+      ? this.lightenDarkenColor(this.hex(color), amt)
       : null;
+  }
+  // Adds color to theme class
+  addColor(color, hex) {
+    this.color[color] = { hex };
+  }
+  // Adds path to theme class
+  addPath(key, path) {
+    this.paths[key] = path;
   }
 }
 
@@ -122,7 +147,7 @@ class ThemeOptions {
 
 const Theme = new ThemeOptions({
   color: {
-    // colors must be hexadecimal thus far
+    // colors must be hexadecimal in this version so far
     primary: {
       hex: "#048CB9"
     },
@@ -137,13 +162,28 @@ const Theme = new ThemeOptions({
     }
   },
   paths: {
-        blog: `/blog/`,
-        home: `/home/`,
-        tags: `/blog/tag/`,
-        baseURL: 'dev.watermarksmartdesign.com',
-        protocol: 'https',
-        contact: '/contact/',
-        faq: '/faq/'
+    blog: `/blog/`,
+    home: `/home/`,
+    tags: `/blog/tag/`,
+    baseURL: "dev.watermarksmartdesign.com",
+    protocol: "https",
+    contact: "/contact/",
+    faq: "/faq/"
+  },
+  font: {
+    body: {
+      family: `${themeFontName}, sans-serif`,
+      weight: 400
+    },
+    heading: {
+      family: `${themeFontName}, sans-serif`,
+      weight: 300
+    },
+    button: {
+      family: `${themeFontName}, sans-serif`,
+      weight: 400,
+      size: ".9rem"
+    }
   }
 });
 
@@ -151,7 +191,7 @@ const Theme = new ThemeOptions({
 // const theme = {
 //     colors: {
 //       primary: '#048CB9',
-//       primary_darker: '#0471b9',
+//       primary_darken: '#0471b9',
 //       primary_lighter: '#18bef5',
 //       secondary: '#ebe72a',
 //       accent: '#B9D800',
@@ -169,38 +209,38 @@ const Theme = new ThemeOptions({
 //       transition: 'all .3s ease',
 //       skew: 'skew(-.512rad)',
 //     },
-//     font: {
-//       body: {
-//         family: `${themeFontName}, sans-serif`,
-//         weight: 400,
-//         size: themePad.single
-//       },
-//       heading: {
-//         family: `${themeFontName}, sans-serif`,
-//         weight: 300,
-//         size: themePad.double
-//       },
-//       button: {
-//         family: `${themeFontName}, sans-serif`,
-//         weight: 400,
-//         size: '.9rem'
-//       }
-//     },
-    // paths: {
-    //   solutions: `/product/`,
-    //   solutionsType: `/lighting-solutions/`,
-    //   ourApproach: `/our-approach/`,
-    //   inspiration: `/inspiration/`,
-    //   application: `/inspiration/application`,
-    //   blog: `/blog/`,
-    //   resources: `/resources/`,
-    //   home: `/home/`,
-    //   tags: `/blog/tag/`,
-    //   baseURL: 'evo-lite.com',
-    //   protocol: 'https://',
-    //   contact: '/contact/',
-    //   faq: '/faq/'
-    // }
+// font: {
+//   body: {
+//     family: `${themeFontName}, sans-serif`,
+//     weight: 400,
+//     size: themePad.single
+//   },
+//   heading: {
+//     family: `${themeFontName}, sans-serif`,
+//     weight: 300,
+//     size: themePad.double
+//   },
+//   button: {
+//     family: `${themeFontName}, sans-serif`,
+//     weight: 400,
+//     size: '.9rem'
+//   }
+// },
+// paths: {
+//   solutions: `/product/`,
+//   solutionsType: `/lighting-solutions/`,
+//   ourApproach: `/our-approach/`,
+//   inspiration: `/inspiration/`,
+//   application: `/inspiration/application`,
+//   blog: `/blog/`,
+//   resources: `/resources/`,
+//   home: `/home/`,
+//   tags: `/blog/tag/`,
+//   baseURL: 'evo-lite.com',
+//   protocol: 'https://',
+//   contact: '/contact/',
+//   faq: '/faq/'
+// }
 //   }
 
 export default Theme;
