@@ -38,7 +38,7 @@ class ThemeOptions {
     this.padding = settings.padding ? settings.padding : getThemePadding();
     this.baseUnit = settings.baseUnit ? settings.baseUnit : "rem";
   }
-  getPad(size, string = true) {
+  pad(size, string = true) {
     return string
       ? `${this.padding.sizes[size] * this.padding.base}${this.padding.units}`
       : `${this.padding.sizes[size] * this.padding.base}`;
