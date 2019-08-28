@@ -50,8 +50,8 @@ A quick look at the top-level of src files
     ```js
     // size "single" equals 1rem
     
-    console.log(Theme.getPad('single')) // output '1rem'
-    console.log(Theme.getPad('single',false)) // output 1
+    console.log(Theme.pad('single')) // output '1rem'
+    console.log(Theme.pad('single',false)) // output 1
     
     ```
     
