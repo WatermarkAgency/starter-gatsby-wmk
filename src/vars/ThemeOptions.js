@@ -37,6 +37,7 @@ class ThemeOptions {
     this.paths = settings.paths ? settings.paths : {};
     this.padding = settings.padding ? settings.padding : getThemePadding();
     this.baseUnit = settings.baseUnit ? settings.baseUnit : "rem";
+    this.break = settings.break ? settings.break : {};
   }
   pad(size, string = true) {
     return string
@@ -144,6 +145,12 @@ const Theme = new ThemeOptions({
         protocol: 'https',
         contact: '/contact/',
         faq: '/faq/'
+  },
+  break: {
+    xs: '576px',
+    sm: '768px',
+    md: '992px',
+    lg: '1200px'
   }
 });
 
