@@ -1,8 +1,12 @@
+require('dotenv').config({
+  path: '.env'
+})
+
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
+    title: `WMK Gatsby Starter`,
     description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    author: `@WatermarkAgency`,
   },
   plugins: [
     {
@@ -109,6 +113,12 @@ module.exports = {
         name: `images`,
         path: `${__dirname}/src/images`,
       },
+    },
+    {
+      resolve: `gatsby-plugin-styled-components`,
+      // options: {
+      //   // Add any options here
+      // },
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
