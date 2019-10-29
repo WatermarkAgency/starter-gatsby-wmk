@@ -1,30 +1,38 @@
-import React from 'react'
+import React from "react";
 
-// import FeaturesBlock from './blocks/EvoFeaturesBlock'
+import Error from './ErrorBlock'
+import Body from "./blocks/BlockBody";
 
-const Flexible = (props) => (
-        // Dynamic ACF Flexible Content Blocks handling
-        props.blocks ? (<div className="flexible-content">
-          {
-              /* Render any found Flexible content blocks */
-              props.blocks ? props.blocks.map((block,i)=>{
-              /* Get block slug from ACF id */
-              let slug = block.id ? block.id.split('_')[1] : 'block_error'
-              /* Setup default JSX case */
-              const blockClass = 'layout-block '+slug+'-block'
-              let jsx = <div>{slug}</div>
-              switch(true){
-                  /* Assign jsx depending on matching slugs */
-                //   case(slug === 'features'):
-                //       jsx = <FeaturesBlock blockData={block}/>
-                //       break
-                  default:
+const registeredBlocks = [
+  { slug: "home", comp: Body },
+];
+
+const Flexible = props =>
+  // Dynamic ACF Flexible Content Blocks handling
+  props.blocks ? (
+    <div className="flexible-content">
+      {/* Render any found Flexible content blocks */
+      props.blocks
+        ? props.blocks.map((block, i) => {
+            /* Get block slug from ACF id */
+            const slug = block.__typename ? block.__typename.split("_")[1] : "block_error";
+            /* Setup default JSX case */
+            const blockClass = "layout-block " + slug + "-block";
+            let JSX = Error;
+            /* Check current page slug for registered block */
+            registeredBlocks.forEach(piece => {
+              if (piece.slug === slug) {
+                JSX = piece.comp;
               }
-              return <div key={block.id+i} className={blockClass}>{jsx}</div>
-              
-          }) : null 
-          }
-      </div>) : null
-)
+            });
+            return (
+              <div key={block.__typename + i} className={blockClass}>
+                <JSX block={block} slug={slug}/>
+              </div>
+            );
+          })
+        : null}
+    </div>
+  ) : null;
 
-export default Flexible
+export default Flexible;
